@@ -153,6 +153,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cross: {fileID: 21300000, guid: c498020b3664d2448b60b5934e835252, type: 3}
-  noun: {fileID: 21300000, guid: 50c2ce05e2a2298478216177b12aad38, type: 3}
+  nought: {fileID: 21300000, guid: 50c2ce05e2a2298478216177b12aad38, type: 3}
   value: 0
   lines: []

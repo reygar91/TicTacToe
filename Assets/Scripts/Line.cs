@@ -18,7 +18,7 @@ public class Line : MonoBehaviour
             {
                 if (cell.value == value)
                 {
-                    counter++; //Debug.Log(name + " :" + counter);
+                    counter++;
                 }
                 else if (cell.value != Cell.Status.Empty)
                 {

@@ -15,7 +15,7 @@ public class ForkBlock : AIStrategy
 
         Cell.Status enemy;
         if (controller.Player == Cell.Status.Cross)
-            enemy = Cell.Status.Noun;
+            enemy = Cell.Status.Nought;
         else enemy = Cell.Status.Cross;
 
         potentialEnemyLines = FindLinesWithOneOfType(enemy, controller.lines);
@@ -34,12 +34,10 @@ public class ForkBlock : AIStrategy
     private List<Line> FindLinesWithOneOfType(Cell.Status cellValue, Line[] lines)
     {
         List<Line> result = new List<Line>();
-        //potentialEnemyLines = new List<Line>();
         foreach (Line line in lines)
         {
             if (!line.Draw)
             {
-                //int counter = 0;
                 foreach (Cell item in line.cells)
                 {
                     if (item.value == cellValue)
@@ -78,17 +76,6 @@ public class ForkBlock : AIStrategy
             }
         }
     }
-
-    //private void FindPotentiallyBetterMoves(Cell.Status cellValue)
-    //{
-    //    eligibleCells = new List<Cell>();
-    //    foreach (Cell cell in potentialEnemyCells)
-    //    {
-    //        eligibleLines = FindLinesWithOneOfType(cellValue, cell.lines.ToArray());
-    //        if (eligibleLines.Count > 0)
-    //            eligibleCells.Add(cell);
-    //    }
-    //}
 
     private List<Cell> FindPotentiallyBetterMoves(GameController controller)
     {

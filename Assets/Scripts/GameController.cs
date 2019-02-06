@@ -14,13 +14,14 @@ public class GameController : MonoBehaviour
 
     public Cell.Status Player;
 
+    public Toggle[] toggles;
+    public Text VictoryMessage, CrossesTxt, NoughtsTxt;
+
+    private int CrossesScore, NoughtsScore;
+
     private void Awake()
     {
-        RectTransform rectT = GetComponent<RectTransform>();
-        Debug.Log("height " + rectT.rect.height);
-        Debug.Log("width " + rectT.rect.width);
-
-        float newSize = Mathf.Min(rectT.rect.height, rectT.rect.width)/4;
+        toggles[0].onValueChanged.AddListener(FirstMove);
 
         cellsRaw = GetComponentsInChildren<Cell>();
 
@@ -29,11 +30,8 @@ public class GameController : MonoBehaviour
             for (int col=0; col<3; col++)
             {
                 cells[row, col] = cellsRaw[row*3+col];
-                //Cell newCell = Instantiate(cellPrefub, transform);
                 
                 RectTransform cellRectT = cells[row, col].GetComponent<RectTransform>();
-                cellRectT.sizeDelta = new Vector2(newSize, newSize);
-                cellRectT.localPosition = new Vector3((col-1) * newSize, (row-1) * newSize, 0f);
             }
         }
 
@@ -49,6 +47,56 @@ public class GameController : MonoBehaviour
             if (result)
                 break;
         }        
+    }
+
+    public void RestartGame()
+    {
+        foreach (Cell cell in cellsRaw)
+        {
+            cell.Restart();
+        }
+        foreach (Line line in lines)
+        {
+            line.Draw = false;
+        }
+        Player = Cell.Status.Cross;
+        toggles[0].isOn = true;
+        toggles[0].onValueChanged.AddListener(FirstMove);
+        toggles[0].interactable = true;
+        toggles[1].interactable = true;
+        VictoryMessage.transform.parent.gameObject.SetActive(false);
+    }
+
+    public void CloseApp()
+    {
+        Application.Quit();
+    }
+
+    public void FirstMove(bool value)
+    {
+        if (!value)
+        {
+            AiTurn();
+            toggles[0].onValueChanged.RemoveAllListeners();
+            toggles[0].interactable = false;
+            toggles[1].interactable = false;
+        }
+        
+    }
+
+    public void UpdateScores(Cell.Status value)
+    {
+        switch (value)
+        {
+            case Cell.Status.Cross:
+                CrossesScore++;
+                CrossesTxt.text = CrossesScore.ToString();
+                break;
+            case Cell.Status.Nought:
+                NoughtsScore++;
+                NoughtsTxt.text = NoughtsScore.ToString();
+                break;
+        }
     }
     
 }

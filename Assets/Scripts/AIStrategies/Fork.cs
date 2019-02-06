@@ -28,7 +28,6 @@ public class Fork : AIStrategy
         {
             if (!line.Draw)
             {
-                //int counter = 0;
                 foreach (Cell item in line.cells)
                 {
                     if (item.value == cellValue)

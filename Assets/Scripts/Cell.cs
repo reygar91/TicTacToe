@@ -6,14 +6,14 @@ using UnityEngine.UI;
 public class Cell : MonoBehaviour
 {
 
-    public Sprite cross, noun;
+    public Sprite cross, nought;
     private Image image;
     private Button button;
 
-    public enum Status { Empty, Cross, Noun}
+    public enum Status { Empty, Cross, Nought}
     public Status value;
 
-    GameController myGameManager;
+    GameController controller;
 
     public List<Line> lines = new List<Line>();
 
@@ -21,11 +21,11 @@ public class Cell : MonoBehaviour
     {
         image = GetComponent<Image>();
         button = GetComponent<Button>();
-        myGameManager = FindObjectOfType<GameController>();
+        controller = FindObjectOfType<GameController>();
     }
     private void Start()
     {
-        foreach (Line line in myGameManager.lines)
+        foreach (Line line in controller.lines)
         {
             foreach (Cell cell in line.cells)
             {
@@ -35,39 +35,6 @@ public class Cell : MonoBehaviour
         }
     }
 
-    //public void Cross()
-    //{
-    //    image.sprite = cross;
-    //    value = Status.Cross;
-    //    button.interactable = false;
-    //    if (CheckVictoryCondition(value))
-    //    {
-    //        Debug.Log(value.ToString() + " has WON!");
-    //    } else
-    //    {
-    //        PassTurnTo(Status.Noun);
-    //    }
-    //}
-
-    //public void Noun()
-    //{
-    //    image.sprite = noun;
-    //    value = Status.Noun;
-    //    button.interactable = false;
-    //    if (CheckVictoryCondition(value))
-    //    {
-    //        Debug.Log(value.ToString() + " has WON!");
-    //    }
-    //    else
-    //    {
-    //        PassTurnTo(Status.Cross);
-    //    }
-    //}
-
-    //public void PassTurnTo(Status side)
-    //{
-    //    myGameManager.AiTurn(side);
-    //}
 
     private bool CheckVictoryCondition(Status value)
     {
@@ -83,35 +50,48 @@ public class Cell : MonoBehaviour
 
     public void DrawASign ()
     {
-        value = myGameManager.Player;
+        value = controller.Player;
         //value = input;
         switch (value)
         {
             case Status.Cross:
                 image.sprite = cross;
                 break;
-            case Status.Noun:
-                image.sprite = noun;
+            case Status.Nought:
+                image.sprite = nought;
                 break;
         }
+        var tempColor = image.color;
+        tempColor.a = 1.0f;
+        image.color = tempColor;
         button.interactable = false;
         if (CheckVictoryCondition(value))
         {
-            Debug.Log(value.ToString() + " has WON!");
+            controller.UpdateScores(value);
+            controller.VictoryMessage.text = value.ToString() + " WIN!";
+            controller.VictoryMessage.transform.parent.gameObject.SetActive(true);
         }
         else
         {
-            if (myGameManager.Player == Status.Cross)
-                myGameManager.Player = Status.Noun;
+            if (controller.Player == Status.Cross)
+                controller.Player = Status.Nought;
             else
-                myGameManager.Player = Status.Cross;
+                controller.Player = Status.Cross;
         }
     }
 
     public void AiTurn()
     {
-        myGameManager.AiTurn();
+        controller.AiTurn();
     }
 
-    
+    public void Restart()
+    {
+        var tempColor = image.color;
+        tempColor.a = 0.0f;
+        image.color = tempColor;
+        value = Status.Empty;
+        button.interactable = true;
+    }
+
 }

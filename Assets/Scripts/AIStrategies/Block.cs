@@ -6,7 +6,6 @@ public class Block : AIStrategy
 {
     public override bool MakeMove(GameController controller)
     {
-        //cellValue = Cell.cellValue.Noun;
         bool result = false;
         foreach (Line line in controller.lines)
         {
