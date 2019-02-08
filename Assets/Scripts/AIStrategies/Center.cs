@@ -9,7 +9,7 @@ public class Center : AIStrategy
         bool result = false;
         if (controller.cells[1, 1].value == Cell.Status.Empty)
         {
-            controller.cells[1, 1].DrawASign();
+            controller.cells[1, 1].MakeMove();
             result = true;
         }
         return result;

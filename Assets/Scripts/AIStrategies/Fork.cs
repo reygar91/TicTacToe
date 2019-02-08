@@ -15,7 +15,7 @@ public class Fork : AIStrategy
         
         if (eligibleCells.Count > 0)
         {
-            eligibleCells[Random.Range(0, eligibleCells.Count)].DrawASign();
+            eligibleCells[Random.Range(0, eligibleCells.Count)].MakeMove();
             result = true;
         }
         return result;

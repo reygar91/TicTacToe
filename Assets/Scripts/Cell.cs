@@ -5,12 +5,11 @@ using UnityEngine.UI;
 
 public class Cell : MonoBehaviour
 {
-
     public Sprite cross, nought;
     private Image image;
     private Button button;
 
-    public enum Status { Empty, Cross, Nought}
+    public enum Status { Empty, Crosses, Noughts}
     public Status value;
 
     GameController controller;
@@ -35,11 +34,54 @@ public class Cell : MonoBehaviour
         }
     }
 
+    public void MakeMove() //Attached to button in Editor
+    {
+        DrawASign();
+        CheckEndGameConditions();
+    }
+
+    private void DrawASign ()
+    {
+        value = controller.Player;
+        switch (value)
+        {
+            case Status.Crosses:
+                image.sprite = cross;
+                break;
+            case Status.Noughts:
+                image.sprite = nought;
+                break;
+        }
+        var tempColor = image.color;
+        tempColor.a = 1.0f;
+        image.color = tempColor;
+        button.interactable = false;
+        controller.emptyCells.Remove(this);
+    }
+
+    private void CheckEndGameConditions()
+    {
+        if (CheckVictoryCondition(value))
+        {
+            controller.UpdateScores(value);
+            controller.EndGame.text = value.ToString() + " WINS!";
+            controller.EndGame.transform.parent.gameObject.SetActive(true);
+        }
+        else if (controller.emptyCells.Count == 0)
+        {
+            controller.EndGame.text = "DRAW";
+            controller.EndGame.transform.parent.gameObject.SetActive(true);
+        }
+        else
+        {
+            PassTurnToNextPlayer();
+        }
+    }
 
     private bool CheckVictoryCondition(Status value)
     {
         bool result = false;
-        foreach(Line line in lines)
+        foreach (Line line in lines)
         {
             result = line.CheckVictoryCondition(value);
             if (result)
@@ -48,44 +90,27 @@ public class Cell : MonoBehaviour
         return result;
     }
 
-    public void DrawASign ()
+    private void PassTurnToNextPlayer()
     {
-        value = controller.Player;
-        //value = input;
-        switch (value)
+        if (controller.Player == Status.Crosses)
         {
-            case Status.Cross:
-                image.sprite = cross;
-                break;
-            case Status.Nought:
-                image.sprite = nought;
-                break;
-        }
-        var tempColor = image.color;
-        tempColor.a = 1.0f;
-        image.color = tempColor;
-        button.interactable = false;
-        if (CheckVictoryCondition(value))
-        {
-            controller.UpdateScores(value);
-            controller.VictoryMessage.text = value.ToString() + " WIN!";
-            controller.VictoryMessage.transform.parent.gameObject.SetActive(true);
+            controller.Player = Status.Noughts;
+            controller.toggles[1].isOn = true;
         }
         else
         {
-            if (controller.Player == Status.Cross)
-                controller.Player = Status.Nought;
-            else
-                controller.Player = Status.Cross;
+            controller.Player = Status.Crosses;
+            controller.toggles[0].isOn = true;
         }
     }
 
-    public void AiTurn()
-    {
-        controller.AiTurn();
+    public void AiTurn() //Attached to button in Editor
+    { 
+        if (controller.EndGame.transform.parent.gameObject.activeSelf == false)
+            controller.StartCoroutine("AiTurn");
     }
 
-    public void Restart()
+    public void Restart() //Called from GameController
     {
         var tempColor = image.color;
         tempColor.a = 0.0f;
@@ -94,4 +119,11 @@ public class Cell : MonoBehaviour
         button.interactable = true;
     }
 
+    public void DisablePlayerSwitch() //Attached to button in Editor
+    {
+        controller.toggles[0].onValueChanged.RemoveAllListeners();
+        controller.toggles[0].interactable = false;
+        controller.toggles[1].interactable = false;
+    }
+    
 }

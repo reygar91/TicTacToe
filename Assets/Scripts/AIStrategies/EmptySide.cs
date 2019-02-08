@@ -9,7 +9,7 @@ public class EmptySide : AIStrategy
         bool result = false;
 
         List<Cell> cellsToConsider = new List<Cell>();
-        foreach (Cell cell in controller.cellsRaw)
+        foreach (Cell cell in controller.cells)
         {
             cellsToConsider.Add(cell);
         }
@@ -35,7 +35,7 @@ public class EmptySide : AIStrategy
 
         if (cellsToConsider.Count != 0)
         {
-            cellsToConsider[Random.Range(0, cellsToConsider.Count)].DrawASign();
+            cellsToConsider[Random.Range(0, cellsToConsider.Count)].MakeMove();
             result = true;
         }
 

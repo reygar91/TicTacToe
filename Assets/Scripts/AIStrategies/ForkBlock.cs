@@ -14,9 +14,9 @@ public class ForkBlock : AIStrategy
         bool result = false;
 
         Cell.Status enemy;
-        if (controller.Player == Cell.Status.Cross)
-            enemy = Cell.Status.Nought;
-        else enemy = Cell.Status.Cross;
+        if (controller.Player == Cell.Status.Crosses)
+            enemy = Cell.Status.Noughts;
+        else enemy = Cell.Status.Crosses;
 
         potentialEnemyLines = FindLinesWithOneOfType(enemy, controller.lines);
         FindPotentialEnemyMoves(controller.lines);
@@ -25,7 +25,7 @@ public class ForkBlock : AIStrategy
         {
             List<Cell> Move = new List<Cell>();
             Move = FindPotentiallyBetterMoves(controller);
-            Move[Random.Range(0, Move.Count)].DrawASign();
+            Move[Random.Range(0, Move.Count)].MakeMove();
             result = true;
         }
         return result;
@@ -83,7 +83,7 @@ public class ForkBlock : AIStrategy
 
         List<Cell> cellsToConsider = new List<Cell>();
 
-        foreach (Cell item in controller.cellsRaw)
+        foreach (Cell item in controller.cells)
         {
             if (item.value == Cell.Status.Empty)
                 cellsToConsider.Add(item);

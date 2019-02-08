@@ -1,24 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(menuName = "AI/EmptyCorner")]
-public class EmptyCorner : AIStrategy
+[CreateAssetMenu(menuName ="AI/Random")]
+public class RandomMove : AIStrategy
 {
     public override bool MakeMove(GameController controller)
     {
         bool result = false;
-
         List<Cell> cellsToConsider = new List<Cell>();
 
-        for (int row = 0; row < 2; row++)
+        foreach (Cell cell in controller.cells)
         {
-            for (int col = 0; col < 2; col++)
-            {
-                if (controller.cells[2 * row, 2 * col].value == Cell.Status.Empty)
-                {
-                    cellsToConsider.Add(controller.cells[2 * row, 2 * col]);
-                }
-            }
+            if (cell.value == Cell.Status.Empty)
+                cellsToConsider.Add(cell);
         }
 
         if (cellsToConsider.Count != 0)

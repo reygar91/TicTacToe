@@ -43,7 +43,7 @@ public class Win : AIStrategy
         foreach (Cell cell in line.cells)
         {
             if (cell.value == Cell.Status.Empty)
-                cell.DrawASign();
+                cell.MakeMove();
         }
     }
 }

@@ -7,7 +7,7 @@ public class OppositeCorner : AIStrategy
     public override bool MakeMove(GameController controller)
     {
         bool result = false;
-        Cell.Status enemy = controller.Player == Cell.Status.Cross ? Cell.Status.Nought : Cell.Status.Cross;
+        Cell.Status enemy = controller.Player == Cell.Status.Crosses ? Cell.Status.Noughts : Cell.Status.Crosses;
 
         for (int row = 0; row < 2; row++)
         {
@@ -17,7 +17,7 @@ public class OppositeCorner : AIStrategy
                 {
                     if(controller.cells[2 * ((row + 1) % 2), 2 * ((col + 1) % 2)].value == Cell.Status.Empty)
                     {
-                        controller.cells[2 * ((row + 1) % 2), 2 * ((col + 1) % 2)].DrawASign();
+                        controller.cells[2 * ((row + 1) % 2), 2 * ((col + 1) % 2)].MakeMove();
                         result = true;
                         row = 2; break;
                     }                    
